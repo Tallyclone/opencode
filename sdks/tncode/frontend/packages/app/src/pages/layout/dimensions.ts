@@ -1,0 +1,7 @@
+export const LEFT_RAIL_WIDTH = 60
+export const RIGHT_RAIL_WIDTH = 30
+export const SIDEBAR_DEFAULT_WIDTH = 251
+export const SIDEBAR_MIN_WIDTH = 251
+export const TITLEBAR_HEIGHT = 40
+export const SESSION_HEADER_HEIGHT = 48
+export const SESSION_STICKY_ACCORDION_TOP = 64

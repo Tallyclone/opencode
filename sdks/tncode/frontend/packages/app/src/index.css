@@ -1,0 +1,269 @@
+@import "@opencode-ai/ui/styles/tailwind";
+
+:root {
+  --session-rail-left-bg: color-mix(in srgb, var(--background-base) 92%, black 8%);
+  --session-rail-right-bg: color-mix(in srgb, var(--background-raised-base) 92%, black 8%);
+  --session-surface-main: color-mix(in srgb, var(--background-stronger) 96%, var(--background-base) 4%);
+  --session-separator-soft: color-mix(in srgb, var(--border-weak-base) 64%, transparent 36%);
+  --session-rail-action-active-bg: color-mix(in srgb, var(--surface-base-active) 70%, var(--surface-base-hover) 30%);
+  --session-motion-fast: 120ms;
+  --session-motion-normal: 160ms;
+  --session-motion-slow: 220ms;
+  --session-motion-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.sidebar-left-rail {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--session-rail-left-bg) 90%, var(--surface-base-hover) 10%) 0%,
+    var(--session-rail-left-bg) 100%
+  );
+}
+
+.session-shell {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--background-base) 94%, var(--background-raised-base) 6%) 0%,
+    var(--background-base) 100%
+  );
+}
+
+.session-content-surface {
+  background-color: var(--session-surface-main);
+}
+
+.session-right-rail {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--session-rail-right-bg) 94%, var(--surface-base-hover) 6%) 0%,
+    var(--session-rail-right-bg) 100%
+  );
+  box-shadow:
+    inset 1px 0 0 var(--session-separator-soft),
+    inset 0 1px 0 color-mix(in srgb, var(--border-weak-base) 50%, transparent 50%);
+}
+
+.session-right-rail-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.session-right-rail-divider {
+  width: 14px;
+  height: 1px;
+  background: var(--session-separator-soft);
+  margin: 2px 0;
+}
+
+[data-component="button"].session-rail-action[data-variant="ghost"] {
+  border-radius: 8px;
+  transition:
+    background-color var(--session-motion-fast) var(--session-motion-ease),
+    color var(--session-motion-fast) var(--session-motion-ease),
+    transform var(--session-motion-fast) var(--session-motion-ease);
+}
+
+[data-component="button"].session-rail-action[data-variant="ghost"] [data-slot="icon-svg"] {
+  color: var(--icon-weak);
+}
+
+[data-component="button"].session-rail-action[data-variant="ghost"]:hover:not(:disabled) [data-slot="icon-svg"],
+[data-component="button"].session-rail-action[data-variant="ghost"]:focus-visible:not(:disabled)
+  [data-slot="icon-svg"] {
+  color: var(--icon-strong-base);
+}
+
+[data-component="button"].session-rail-action[data-variant="ghost"]:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+[data-component="button"].session-rail-action.session-rail-action-active[data-variant="ghost"] {
+  background-color: var(--session-rail-action-active-bg);
+}
+
+[data-component="button"].session-rail-action.session-rail-action-active[data-variant="ghost"] [data-slot="icon-svg"] {
+  color: var(--icon-strong-base);
+}
+
+.session-side-panel {
+  box-shadow: inset 1px 0 0 var(--session-separator-soft);
+}
+
+.session-filetree-shell {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--background-stronger) 92%, var(--background-base) 8%) 0%,
+    var(--background-stronger) 100%
+  );
+}
+
+[data-scope="filetree"] [data-slot="tabs-list"] {
+  transition: background-color var(--session-motion-normal) var(--session-motion-ease);
+}
+
+[data-scope="filetree"] [data-slot="tabs-trigger-wrapper"] {
+  transition:
+    background-color var(--session-motion-fast) var(--session-motion-ease),
+    color var(--session-motion-fast) var(--session-motion-ease),
+    transform var(--session-motion-fast) var(--session-motion-ease);
+}
+
+[data-scope="filetree"] [data-slot="tabs-trigger-wrapper"]:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.session-filetree-content-changes {
+  background: color-mix(in srgb, var(--background-stronger) 90%, var(--surface-warning-base) 10%);
+}
+
+.session-filetree-content-all {
+  background: color-mix(in srgb, var(--background-stronger) 96%, var(--background-base) 4%);
+}
+
+.session-prompt-shell {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--session-surface-main) 100%, transparent 0%) 0%,
+    color-mix(in srgb, var(--session-surface-main) 92%, var(--background-base) 8%) 100%
+  );
+}
+
+.session-prompt-shell::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -14px;
+  height: 14px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--background-base) 80%, transparent 20%) 0%,
+    transparent 100%
+  );
+}
+
+.session-prompt-container {
+  position: relative;
+}
+
+.session-prompt-input-wrap {
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--background-raised-base) 92%, var(--background-base) 8%);
+  box-shadow:
+    0 -1px 0 color-mix(in srgb, var(--border-weak-base) 65%, transparent 35%),
+    0 8px 22px color-mix(in srgb, black 18%, transparent 82%);
+  backdrop-filter: blur(8px);
+  transition:
+    box-shadow var(--session-motion-normal) var(--session-motion-ease),
+    background-color var(--session-motion-normal) var(--session-motion-ease);
+}
+
+.session-prompt-loading {
+  background: color-mix(in srgb, var(--background-base) 76%, var(--background-raised-base) 24%);
+}
+
+.prompt-running-marquee {
+  margin-top: 6px;
+  width: min(320px, 100%);
+  margin-left: auto;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--border-weak-base) 78%, transparent 22%);
+  background: color-mix(in srgb, var(--background-base) 92%, var(--surface-weak) 8%);
+}
+
+.prompt-running-marquee-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 36px;
+  white-space: nowrap;
+  padding: 6px 10px;
+  color: var(--text-weak);
+  font-size: var(--font-size-small);
+  animation: prompt-running-marquee 9s linear infinite;
+}
+
+@keyframes prompt-running-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-33.333%);
+  }
+}
+
+.session-thread-header-shell {
+  background: var(--session-surface-main);
+}
+
+.session-thread-header-card {
+  border-bottom: 1px solid color-mix(in srgb, var(--border-weak-base) 68%, transparent 32%);
+}
+
+.session-thread-content {
+  position: relative;
+}
+
+.session-thread-content::before {
+  content: none;
+}
+
+.session-titlebar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+}
+
+.session-titlebar-path {
+  color: var(--text-weaker);
+  opacity: 0.85;
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+  text-align: left;
+  max-width: clamp(140px, 26vw, 420px);
+  flex: 0 1 auto;
+}
+
+@media (max-width: 1200px) {
+  .session-titlebar-path {
+    max-width: clamp(110px, 20vw, 260px);
+  }
+}
+
+@media (max-width: 980px) {
+  .session-titlebar-path {
+    max-width: 140px;
+  }
+}
+
+@media (max-width: 350px) {
+  .session-titlebar-path {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .session-right-rail,
+  .session-filetree-shell,
+  [data-component="button"].session-rail-action[data-variant="ghost"],
+  [data-scope="filetree"] [data-slot="tabs-list"],
+  [data-scope="filetree"] [data-slot="tabs-trigger-wrapper"],
+  .session-prompt-input-wrap {
+    transition: none;
+  }
+
+  [data-component="button"].session-rail-action[data-variant="ghost"]:hover:not(:disabled),
+  [data-scope="filetree"] [data-slot="tabs-trigger-wrapper"]:hover:not(:disabled) {
+    transform: none;
+  }
+}

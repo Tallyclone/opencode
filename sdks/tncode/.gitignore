@@ -1,0 +1,12 @@
+dist
+node_modules
+.vscode-test/
+out/
+*.vsix
+*.log
+coverage/
+.env
+.env.local
+.env.*.local
+.DS_Store
+Thumbs.db
