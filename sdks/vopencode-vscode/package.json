@@ -1,0 +1,251 @@
+{
+  "name": "opencode",
+  "displayName": "opencode",
+  "description": "opencode for VS Code",
+  "version": "1.2.6",
+  "publisher": "sst-dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anomalyco/opencode"
+  },
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#000000",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.94.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*",
+    "onView:opencode.chatSidebar",
+    "onCommand:opencode.openChat",
+    "onCommand:opencode.openNewChat",
+    "onCommand:opencode.addFileReference",
+    "onCommand:opencode.restartServer",
+    "onCommand:opencode.openTerminal",
+    "onCommand:opencode.openNewTerminal",
+    "onCommand:opencode.addFilepathToTerminal"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "opencode.openChat",
+        "title": "Open opencode",
+        "icon": {
+          "light": "images/button-dark.svg",
+          "dark": "images/button-light.svg"
+        }
+      },
+      {
+        "command": "opencode.openNewChat",
+        "title": "Open opencode in new tab",
+        "icon": {
+          "light": "images/button-dark.svg",
+          "dark": "images/button-light.svg"
+        }
+      },
+      {
+        "command": "opencode.addFileReference",
+        "title": "Copy File Reference"
+      },
+      {
+        "command": "opencode.restartServer",
+        "title": "Restart OpenCode Server"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "opencode",
+          "title": "OpenCode",
+          "icon": "images/activity.svg"
+        }
+      ]
+    },
+    "views": {
+      "opencode": [
+        {
+          "id": "opencode.chatSidebar",
+          "name": "Chat",
+          "type": "webview"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "opencode.openChat",
+          "group": "navigation@1",
+          "when": "view == opencode.chatSidebar"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "opencode.openNewChat",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "OpenCode",
+      "properties": {
+        "opencode.server.mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "external",
+            "manual"
+          ],
+          "default": "auto",
+          "description": "How the extension connects to OpenCode server. auto starts local source server when needed."
+        },
+        "opencode.server.url": {
+          "type": "string",
+          "default": "http://127.0.0.1:4096",
+          "description": "OpenCode server URL used by the chat webview."
+        },
+        "opencode.server.autoStart": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically start server in auto mode when unavailable."
+        },
+        "opencode.server.sourceRepoPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to opencode source repository. If empty, uses current workspace."
+        },
+        "opencode.server.command": {
+          "type": "string",
+          "default": "bun",
+          "description": "Command used to start OpenCode server from source."
+        },
+        "opencode.server.args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "run",
+            "--conditions=browser",
+            "./src/index.ts",
+            "serve",
+            "--hostname",
+            "127.0.0.1",
+            "--port",
+            "4096"
+          ],
+          "description": "Arguments used with server.command for local source startup."
+        },
+        "opencode.server.startTimeoutMs": {
+          "type": "number",
+          "default": 20000,
+          "description": "Server startup timeout in milliseconds."
+        },
+        "opencode.app.url": {
+          "type": "string",
+          "default": "",
+          "description": "Optional app frontend URL. Leave empty to use <server>/app."
+        },
+        "opencode.app.autoStart": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-start local app dev server when app.url is configured and unreachable."
+        },
+        "opencode.app.sourceRepoPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to opencode repo for app auto-start. Defaults to server.sourceRepoPath/workspace."
+        },
+        "opencode.app.command": {
+          "type": "string",
+          "default": "bun",
+          "description": "Command used to start app dev server."
+        },
+        "opencode.app.args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "dev",
+            "--",
+            "--port",
+            "4444"
+          ],
+          "description": "Arguments used with app.command for app startup."
+        },
+        "opencode.app.startTimeoutMs": {
+          "type": "number",
+          "default": 20000,
+          "description": "App startup timeout in milliseconds."
+        },
+        "opencode.workspace.pick": {
+          "type": "string",
+          "enum": [
+            "active",
+            "first"
+          ],
+          "default": "active",
+          "description": "Which workspace folder to sync into OpenCode when multiple folders are open."
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "opencode.openChat",
+        "title": "Run opencode",
+        "key": "cmd+escape",
+        "mac": "cmd+escape",
+        "win": "ctrl+escape",
+        "linux": "ctrl+escape"
+      },
+      {
+        "command": "opencode.openNewChat",
+        "title": "Run opencode",
+        "key": "cmd+shift+escape",
+        "mac": "cmd+shift+escape",
+        "win": "ctrl+shift+escape",
+        "linux": "ctrl+shift+escape"
+      },
+      {
+        "command": "opencode.addFileReference",
+        "title": "opencode: Insert At-Mentioned",
+        "key": "cmd+alt+k",
+        "mac": "cmd+alt+k",
+        "win": "ctrl+alt+K",
+        "linux": "ctrl+alt+K"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "bun run package",
+    "compile": "bun run check-types && bun run lint && node esbuild.js",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "bun run check-types && bun run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "bun run compile-tests && bun run compile && bun run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.94.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "esbuild": "^0.25.3",
+    "typescript": "^5.8.3",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}

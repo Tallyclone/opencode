@@ -50,6 +50,7 @@ export namespace SessionProcessor {
           try {
             let currentText: MessageV2.TextPart | undefined
             let reasoningMap: Record<string, MessageV2.ReasoningPart> = {}
+            let sawToolCallInStream = false
             const stream = await LLM.stream(streamInput)
 
             for await (const value of stream.fullStream) {
@@ -109,6 +110,7 @@ export namespace SessionProcessor {
                   break
 
                 case "tool-input-start":
+                  sawToolCallInStream = true
                   const part = await Session.updatePart({
                     id: toolcalls[value.id]?.id ?? Identifier.ascending("part"),
                     messageID: input.assistantMessage.id,
@@ -132,6 +134,7 @@ export namespace SessionProcessor {
                   break
 
                 case "tool-call": {
+                  sawToolCallInStream = true
                   const match = toolcalls[value.toolCallId]
                   if (match) {
                     const part = await Session.updatePart({
@@ -247,12 +250,26 @@ export namespace SessionProcessor {
                     usage: value.usage,
                     metadata: value.providerMetadata,
                   })
-                  input.assistantMessage.finish = value.finishReason
+                  const rawFinishReason = value.finishReason
+                  const normalizedFinishReason =
+                    sawToolCallInStream && rawFinishReason && !["tool-calls", "unknown"].includes(rawFinishReason)
+                      ? "tool-calls"
+                      : rawFinishReason
+
+                  if (normalizedFinishReason !== rawFinishReason) {
+                    log.info("normalize finishReason due to streamed tool call", {
+                      rawFinishReason,
+                      normalizedFinishReason,
+                      sessionID: input.sessionID,
+                    })
+                  }
+
+                  input.assistantMessage.finish = normalizedFinishReason
                   input.assistantMessage.cost += usage.cost
                   input.assistantMessage.tokens = usage.tokens
                   await Session.updatePart({
                     id: Identifier.ascending("part"),
-                    reason: value.finishReason,
+                    reason: normalizedFinishReason,
                     snapshot: await Snapshot.track(),
                     messageID: input.assistantMessage.id,
                     sessionID: input.assistantMessage.sessionID,
